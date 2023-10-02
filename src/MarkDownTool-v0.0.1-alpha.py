@@ -22,31 +22,44 @@ except PyMarkdownApiException as this_exception:
 
 if (len(scan_result.scan_failures) == 0 and len(scan_result.pragma_errors) == 0):
     print("Scan completed successfully! No errors found.")
-elif len(scan_result.scan_failures) > 0:
-    print("Scan completed with errors. Please see the following list of errors:")
+
+else:
+    # Create an empty dictionary to hold the error information for each file
+    # The key will be the file name and the value will be a list of errors
+    files_with_errors = {}
+
+    print("Scan completed with errors.")
     for error in scan_result.scan_failures:
-        # Need to parse an error such as:
-        # PyMarkdownScanFailure(
-        # scan_file='MarkDownInput/SixthStreetPlatform-v0.0.1a.md',
-        # line_number=1,
-        # column_number=1,
-        # rule_id='MD041',
-        # rule_name='first-line-heading,first-line-h1',
-        # rule_description='First line in file should be a top level heading',
-        # extra_error_information=''
-        # parsed_error = error.PyMarkdownScanFailure
-        # print(parsed_error)
-        # print(type(parsed_error))
-        print(f"Rule ID: {error.rule_id}")
-        print(f"Rule Name: {error.rule_name}")
-        print(f"Rule Description: {error.rule_description}")
-        print(f"At line {error.line_number}")
-        print(f"At column {error.column_number}")
-        print(f"In file {error.scan_file}")
-        if error.extra_error_information != "":
-            print(f"Extra error information: {error.extra_error_information}")
+
+        # If the file name is not already in the dictionary, add it
+        if error.scan_file not in files_with_errors:
+            files_with_errors[error.scan_file] = []
+
+        # Add the error information to the list of errors for the file
+        files_with_errors[error.scan_file].append(
+            {
+                "rule_id": error.rule_id,
+                "rule_name": error.rule_name,
+                "rule_description": error.rule_description,
+                "line_number": error.line_number,
+                "column_number": error.column_number,
+                "extra_error_information": error.extra_error_information
+            }
+        )
+print(f"Found {len(files_with_errors)} file(s) with errors.")
+
+for file_name, errors in files_with_errors.items():
+    print(f"File Name: {file_name}")
+    print(f"Number of errors: {len(errors)}")
+    print()
+
+    for error in errors:
+        print(f"Rule ID: {error['rule_id']}")
+        print(f"Rule Name: {error['rule_name']}")
+        print(f"Rule Description: {error['rule_description']}")
+        print(f"At line: {error['line_number']}")
+        print(f"At column: {error['column_number']}")
+        if error['extra_error_information'] != "":
+            print(
+                f"Extra error information: {error['extra_error_information']}")
         print()
-elif len(scan_result.pragma_errors) > 0:
-    print("Scan completed with pragma errors. Please see the following list of errors:")
-    for error in scan_result.scan_failures:
-        print(f"Error: {error}")
