@@ -46,42 +46,42 @@ else:
                 "extra_error_information": error.extra_error_information
             }
         )
-print(f"Found {len(files_with_errors)} file(s) with errors.")
+    print(f"Found {len(files_with_errors)} file(s) with errors.")
 
-for file_name, errors in files_with_errors.items():
-    print(f"File Name: {file_name}")
-    print(f"Number of errors: {len(errors)}")
-    
-    # Create a dictionary to hold the unique errors
-    unique_errors = {}
+    for file_name, errors in files_with_errors.items():
+        print(f"File Name: {file_name}")
+        print(f"Number of errors: {len(errors)}")
+        
+        # Create a dictionary to hold the unique errors
+        unique_errors = {}
 
-    # Loop through the errors and add them to the dictionary
-    for error in errors:
-        if error['rule_id'] not in unique_errors:
-            error_information = {
-                "rule_id": error['rule_id'],
-                "rule_name": error['rule_name'],
-                "rule_description": error['rule_description'],
-                "found_count": 1
-            }
-            unique_errors[error['rule_id']] = error_information
-        else:
-            unique_errors[error['rule_id']]['found_count'] += 1
-    # Print the unique errors
-    print("Unique Errors: ")
-    for error in unique_errors.values():
-        print(f"Rule Description: {error['rule_description']}")
-        print(f"Found {error['found_count']} times")
+        # Loop through the errors and add them to the dictionary
+        for error in errors:
+            if error['rule_id'] not in unique_errors:
+                error_information = {
+                    "rule_id": error['rule_id'],
+                    "rule_name": error['rule_name'],
+                    "rule_description": error['rule_description'],
+                    "found_count": 1
+                }
+                unique_errors[error['rule_id']] = error_information
+            else:
+                unique_errors[error['rule_id']]['found_count'] += 1
+        # Print the unique errors
+        print("Unique Errors: ")
+        for error in unique_errors.values():
+            print(f"Rule Description: {error['rule_description']}")
+            print(f"Found {error['found_count']} times")
 
-    print()
-
-    for error in errors:
-        print(f"Rule ID: {error['rule_id']}")
-        print(f"Rule Name: {error['rule_name']}")
-        print(f"Rule Description: {error['rule_description']}")
-        print(f"At line: {error['line_number']}")
-        print(f"At column: {error['column_number']}")
-        if error['extra_error_information'] != "":
-            print(
-                f"Extra error information: {error['extra_error_information']}")
         print()
+
+        for error in errors:
+            print(f"Rule ID: {error['rule_id']}")
+            print(f"Rule Name: {error['rule_name']}")
+            print(f"Rule Description: {error['rule_description']}")
+            print(f"At line: {error['line_number']}")
+            print(f"At column: {error['column_number']}")
+            if error['extra_error_information'] != "":
+                print(
+                    f"Extra error information: {error['extra_error_information']}")
+            print()
