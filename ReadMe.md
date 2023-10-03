@@ -20,7 +20,7 @@ docker build -t mark-down-tool .
 ```
 3. Run the docker file:
 ```bash
-docker run -it mark-down-tool
+docker run mark-down-tool
 ```
 
 ### Prerequisites
